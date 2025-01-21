@@ -3,9 +3,7 @@ package main
 import (
 	rg "github.com/gen2brain/raylib-go/raygui"
 	rl "github.com/gen2brain/raylib-go/raylib"
-	// "periph.io/x/conn/v3/gpio"
-	// "periph.io/x/conn/v3/gpio/gpioreg"
-	// "periph.io/x/host/v3"
+	// gpio "github.com/syferever/twoside-litho-gui"
 )
 
 func main() {
