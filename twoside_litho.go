@@ -3,6 +3,7 @@ package main
 import (
 	rg "github.com/gen2brain/raylib-go/raygui"
 	rl "github.com/gen2brain/raylib-go/raylib"
+	gpio "github.com/syferever/twoside-litho-gui/gpioctl"
 )
 
 func main() {
@@ -19,7 +20,18 @@ func main() {
 	rl.ImageResize(right_pic, 930, 850)
 	right_texture := rl.LoadTextureFromImage(right_pic)
 
+	gpio.HostInit()
+	left_out_pin := gpio.NewPin("GPIO17")
+	left_out_pin.SetPinMode("OUT")
+
 	for !rl.WindowShouldClose() {
+
+		switch {
+		case left_out_led == 1 && left_out_pin.Level != gpio.HIGH:
+			left_out_pin.SetPinLevel(gpio.HIGH)
+		case left_out_led == 0 && left_out_pin.Level != gpio.LOW:
+			left_out_pin.SetPinLevel(gpio.LOW)
+		}
 
 		rl.BeginDrawing()
 		rl.ClearBackground(rl.White)

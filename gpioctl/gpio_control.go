@@ -7,18 +7,21 @@ import (
 	"periph.io/x/host/v3"
 )
 
+const HIGH gpio.Level = gpio.High
+const LOW gpio.Level = gpio.Low
+
 type Pin struct {
 	Conf  gpio.PinIO
 	Mode  string
 	Level gpio.Level
 }
 
-func NewPin(name, mode string) *Pin {
+func NewPin(name string) *Pin {
 	new_pin := gpioreg.ByName(name)
 	if new_pin == nil {
 		log.Println("Failed to find pin ", name)
 	}
-	return &Pin{Conf: new_pin, Mode: "NS", Level: gpio.Low}
+	return &Pin{Conf: new_pin, Mode: "NS", Level: LOW}
 }
 
 func HostInit() {
@@ -37,15 +40,8 @@ func (pin *Pin) SetPinMode(mode string) {
 	}
 }
 
-func (pin *Pin) SetPinLevel(lvl string) {
-	switch lvl {
-	case "LOW":
-		pin.Level = gpio.Low
-	case "HIGH":
-		pin.Level = gpio.High
-	default:
-		log.Println("Pin level is incorrect. Waited LOW or HIGH, recieved: ", lvl)
-	}
+func (pin *Pin) SetPinLevel(lvl gpio.Level) {
+	pin.Level = lvl
 	switch pin.Mode {
 	case "OUT":
 		err := pin.Conf.Out(pin.Level)
